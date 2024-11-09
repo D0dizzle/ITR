@@ -1,35 +1,47 @@
 <template>
-  <div class="container mx-auto py-8 max-w-screen-lg">
+  <div class="container mx-auto py-8 max-w-screen-lg px-4">
     <h2 class="text-4xl font-bold text-center mb-8">Warenkorb</h2>
+
+    <!-- Countdown-Timer für Dringlichkeit -->
+    <div v-if="timeLeft > 0" class="bg-red-100 text-red-700 p-4 rounded-lg mb-6 text-center font-bold animate-blink">
+      Schnappen Sie sich den Rabatt! Nur noch {{ formatTimeLeft }} Minuten übrig!
+    </div>
 
     <div v-if="warenkorbProdukte.length > 0">
       <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <div v-for="produkt in warenkorbProdukte" :key="produkt.id" class="flex items-center mb-4 border-b border-gray-200 pb-4">
-          <img :src="produkt.bild" alt="Produktbild" class="w-20 h-20 object-cover rounded mr-4" />
-          <div class="flex-1">
+        <div v-for="produkt in warenkorbProdukte" :key="produkt.id" class="flex flex-col sm:flex-row items-center mb-4 border-b border-gray-200 pb-4">
+          <img :src="produkt.bild" alt="Produktbild" class="w-20 h-20 object-cover rounded mb-4 sm:mb-0 sm:mr-4" />
+          <div class="flex-1 text-center sm:text-left">
             <p class="text-lg font-semibold">{{ produkt.name }}</p>
             <p class="text-gray-600">{{ produkt.preis }} €</p>
+            <p v-if="produkt.beliebt" class="text-sm text-green-500">Beliebt! {{ produkt.popularCount }} Nutzer haben dies heute gekauft.</p>
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center space-x-2 justify-center mt-4 sm:mt-0 mr-auto sm:ml-4">
             <button @click="decreaseQuantity(produkt)" class="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400">-</button>
             <span class="px-4">{{ produkt.menge }}</span>
             <button @click="increaseQuantity(produkt)" class="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400">+</button>
           </div>
-          <p class="text-lg font-bold text-green-600 ml-4">{{ (produkt.preis * produkt.menge).toFixed(2) }} €</p>
-          <button @click="removeFromCart(produkt)" class="ml-4 text-red-600 hover:text-red-800">Löschen</button>
+          <p class="text-lg font-bold text-green-600 mt-4 sm:mt-0 sm:ml-4">{{ (produkt.preis * produkt.menge).toFixed(2) }} €</p>
+          <button @click="removeFromCart(produkt)" class="mt-4 sm:mt-0 sm:ml-4 text-red-600 hover:text-red-800">Löschen</button>
         </div>
       </div>
 
-      <!-- Gesamtsumme -->
-      <div class="text-right text-2xl font-bold mb-6">
-        Gesamtsumme: {{ gesamtPreis.toFixed(2) }} €
+      <!-- Zusätzliche Servicepauschale -->
+      <div class="text-right text-xl font-bold text-gray-500 mb-6">
+        Servicepauschale: 9.99 €
       </div>
 
-      <!-- Checkout-Button -->
+      <!-- Gesamtsumme inklusive Servicepauschale -->
+      <div class="text-right text-2xl font-bold mb-6">
+        Gesamtsumme: {{ (gesamtPreis + serviceFee).toFixed(2) }} €
+      </div>
+
+      <!-- Checkout-Button ohne Bewegung -->
       <div class="flex justify-end">
-        <button @click="checkout" class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <button @click="goToCheckout" class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
           Zur Kasse
         </button>
+
       </div>
     </div>
 
@@ -37,13 +49,47 @@
       Dein Warenkorb ist leer.
     </div>
   </div>
+
+  <!-- Popup für Dringlichkeit nach 30 Sekunden -->
+  <div v-if="showPopup" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+      <p class="text-2xl font-bold mb-4">Nicht verpassen!</p>
+      <p class="mb-6">Sichern Sie sich Ihre Produkte, bevor sie vergriffen sind!</p>
+      <button @click="closePopup" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Weiter shoppen
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-
+const router = useRouter()
 const supabase = useSupabaseClient()
 const warenkorbProdukte = ref([])
+const serviceFee = 9.99
+const timeLeft = ref(300) // 5 Minuten in Sekunden
+const showPopup = ref(false)
+
+// Countdown-Timer starten
+const startCountdown = () => {
+  const timer = setInterval(() => {
+    if (timeLeft.value > 0) {
+      timeLeft.value--
+    } else {
+      clearInterval(timer)
+    }
+  }, 1000)
+}
+
+// Funktion zur Formatierung der Zeit in Minuten und Sekunden
+const formatTimeLeft = computed(() => {
+  const minutes = Math.floor(timeLeft.value / 60)
+  const seconds = timeLeft.value % 60
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+})
 
 // Produkte aus der Supabase-Datenbank laden
 const fetchWarenkorbProdukte = async () => {
@@ -56,8 +102,8 @@ const fetchWarenkorbProdukte = async () => {
     return
   }
 
-    // Gruppiere die Produkte nach produkt_id und summiere die Mengen
-    const groupedData = warenkorbData.reduce((acc, item) => {
+  // Gruppiere die Produkte nach produkt_id und summiere die Mengen
+  const groupedData = warenkorbData.reduce((acc, item) => {
     if (acc[item.produkt_id]) {
       acc[item.produkt_id].menge += item.menge
     } else {
@@ -82,7 +128,9 @@ const fetchWarenkorbProdukte = async () => {
     const produkt = produkteData.find(p => p.id === parseInt(id))
     return {
       ...produkt,
-      menge: groupedData[id].menge
+      menge: groupedData[id].menge,
+      beliebt: true, // Alle Produkte als beliebt markieren
+      popularCount: Math.floor(Math.random() * 50) + 1 // Zufällige Anzahl als Social Proof
     }
   })
 }
@@ -138,13 +186,23 @@ const gesamtPreis = computed(() => {
   return warenkorbProdukte.value.reduce((sum, produkt) => sum + produkt.preis * produkt.menge, 0)
 })
 
+// Popup nach 30 Sekunden anzeigen
+setTimeout(() => {
+  showPopup.value = true
+}, 30000)
+
+const closePopup = () => {
+  showPopup.value = false
+}
+
 // Checkout-Funktion (Beispiel)
-const checkout = () => {
-  alert("Checkout wird initiiert...")
+const goToCheckout = () => {
+  router.push('/checkout')
 }
 
 onMounted(() => {
   fetchWarenkorbProdukte()
+  startCountdown()
 })
 </script>
 
@@ -155,5 +213,15 @@ onMounted(() => {
 
 button:focus {
   outline: none;
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  90% {
+    opacity: 0.8;
+  }
 }
 </style>

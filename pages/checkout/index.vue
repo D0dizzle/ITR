@@ -1,62 +1,56 @@
 <template>
-  <div class="container mx-auto p-8">
-    <h1 class="text-3xl font-bold mb-6 text-center text-dark-blue">Checkout</h1>
-    
-    <!-- Warenkorb Übersicht -->
-    <section class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-2xl font-bold mb-4 text-dark-blue">Ihr Warenkorb</h2>
-      <div v-for="item in cartItems" :key="item.name" class="flex justify-between items-center mb-2">
-        <span class="font-semibold text-gray-700">{{ item.name }}</span>
-        <span class="text-gray-600">{{ item.price }}</span>
-      </div>
-      <div class="flex justify-between items-center font-semibold text-lg border-t pt-2 mt-2">
-        <span>Gesamtsumme:</span>
-        <span>{{ cartTotal }}</span>
-      </div>
-    </section>
-    
-    <!-- Zwangsabo -->
-    <section class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-bold mb-4 text-dark-blue">Zusätzliche Optionen</h2>
-      <label class="flex items-center justify-between mb-2">
-        <span>Exklusives Abo für zukünftige Rabatte (monatlich)</span>
-        <input type="checkbox" checked class="mr-2" />
-      </label>
-      <p class="text-xs text-gray-500">* Automatische Erneuerung, nur monatlich kündbar</p>
-    </section>
+  <div class="container mx-auto py-8 max-w-screen-lg px-4">
+    <h2 class="text-4xl font-bold text-center mb-8">Checkout</h2>
 
-    <!-- Versteckte Zusatzkosten -->
-    <section class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-bold mb-4 text-dark-blue">Zusätzliche Kosten</h2>
-      <div class="flex justify-between items-center mb-2">
-        <span>Servicegebühr</span>
-        <span>€29,99</span>
-      </div>
-      <div class="flex justify-between items-center mb-2">
-        <span>Versicherung (optional, aber vorausgewählt)</span>
-        <input type="checkbox" checked class="mr-2" />
-        <span>€19,99</span>
-      </div>
-      <p class="text-right font-bold text-lg mt-2">Gesamtkosten: {{ totalWithFees }}</p>
-    </section>
+    <!-- Countdown-Timer für Dringlichkeit -->
+    <div v-if="timeLeft > 0" class="bg-red-100 text-red-700 p-4 rounded-lg mb-6 text-center font-bold animate-blink">
+      Beeilen Sie sich! Ihr Warenkorb wird in {{ formatTimeLeft }} Minuten freigegeben!
+    </div>
 
-    <!-- Zahlungsoptionen -->
-    <section class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-bold mb-4 text-dark-blue">Zahlungsmethode</h2>
-      <label class="block mb-4">
-        <span class="block text-sm font-medium text-gray-700">Kreditkarte</span>
-        <input type="text" placeholder="Kartennummer" class="mt-1 p-2 border rounded w-full" />
-      </label>
-      <label class="block mb-4">
-        <span class="block text-sm font-medium text-gray-700">Sofortüberweisung</span>
-        <button class="w-full p-2 bg-green-500 text-white rounded">Mit Sofortüberweisung zahlen</button>
-      </label>
-    </section>
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <!-- Produkte und Kostenübersicht -->
+      <div v-for="produkt in warenkorbProdukte" :key="produkt.id" class="flex justify-between items-center mb-4 border-b border-gray-200 pb-4">
+        <div class="flex items-center">
+          <img :src="produkt.bild" alt="Produktbild" class="w-16 h-16 object-cover rounded mr-4" />
+          <div>
+            <p class="text-lg font-semibold">{{ produkt.name }}</p>
+            <p class="text-gray-600">{{ produkt.preis }} €</p>
+          </div>
+        </div>
+        <p class="text-lg font-bold text-green-600">{{ (produkt.preis * produkt.menge).toFixed(2) }} €</p>
+      </div>
 
-    <!-- Kauf abschließen -->
-    <div class="flex justify-between items-center mt-8">
-      <NuxtLink to="/" class="text-gray-500 hover:text-gray-700">Zurück zum Shop</NuxtLink>
-      <button @click="placeOrder" class="bg-turquoise hover:bg-turquoise-dark text-white font-bold py-2 px-6 rounded-lg">
+      <!-- Versteckte Zusatzkosten -->
+      <div class="flex justify-between text-lg font-semibold text-gray-500 mb-2">
+        <span>Servicepauschale</span>
+        <span>9.99 €</span>
+      </div>
+      <div class="flex justify-between text-lg font-semibold text-gray-500 mb-2">
+        <span>Versicherung (obligatorisch)</span>
+        <span>4.99 €</span>
+      </div>
+
+      <!-- Gesamtsumme inklusive Gebühren -->
+      <div class="flex justify-between text-2xl font-bold mb-6">
+        <span>Gesamtsumme</span>
+        <span>{{ (gesamtPreis + serviceFee + insuranceFee).toFixed(2) }} €</span>
+      </div>
+
+      <!-- Zwangs-Opt-in für Newsletter -->
+      <div class="flex items-center mb-6">
+        <input type="checkbox" id="newsletter" checked disabled class="mr-2 cursor-not-allowed">
+        <label for="newsletter" class="text-sm text-gray-600">
+          Ich möchte den Newsletter abonnieren und willige ein, regelmäßige Angebote zu erhalten.
+        </label>
+      </div>
+
+      <!-- Terms and conditions mit kleiner Schriftgröße -->
+      <div class="text-sm text-gray-500 mb-6">
+        Durch das Abschließen des Kaufvorgangs stimmen Sie unseren <a href="#" class="text-blue-500 underline">Allgemeinen Geschäftsbedingungen</a> und unserer <a href="#" class="text-blue-500 underline">Datenschutzerklärung</a> zu.
+      </div>
+
+      <!-- Checkout-Button -->
+      <button @click="completePurchase" class="w-full px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
         Jetzt kaufen
       </button>
     </div>
@@ -64,40 +58,67 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
-// Beispiel-Warenkorb-Elemente und Preise
-const cartItems = ref([
-  { name: "iPhone 16", price: "€799,99" },
-  { name: "Versicherungspaket", price: "€19,99" }
+const warenkorbProdukte = ref([
+  // Beispielprodukte, ersetzen Sie diese durch tatsächliche Daten aus Ihrem Backend oder Warenkorb
+  { id: 1, name: 'Samsung Galaxy S24', bild: '/images/galaxy-s24.jpg', preis: 699.99, menge: 1 },
+  { id: 2, name: 'Smartwatch', bild: '/images/smartwatch.jpg', preis: 199.99, menge: 2 }
 ])
+const serviceFee = 9.99
+const insuranceFee = 4.99
+const timeLeft = ref(300) // 5 Minuten in Sekunden
 
-const cartTotal = ref("€819,98")
-const serviceFee = ref(29.99)
-const insuranceFee = ref(19.99)
+// Countdown-Timer starten
+const startCountdown = () => {
+  const timer = setInterval(() => {
+    if (timeLeft.value > 0) {
+      timeLeft.value--
+    } else {
+      clearInterval(timer)
+    }
+  }, 1000)
+}
 
-// Berechnung der Gesamtkosten inklusive Zusatzkosten
-const totalWithFees = computed(() => {
-  const total = parseFloat(cartTotal.value.replace("€", "").replace(",", "."))
-  return `€${(total + serviceFee.value + insuranceFee.value).toFixed(2).replace(".", ",")}`
+// Funktion zur Formatierung der Zeit in Minuten und Sekunden
+const formatTimeLeft = computed(() => {
+  const minutes = Math.floor(timeLeft.value / 60)
+  const seconds = timeLeft.value % 60
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
 })
 
-function placeOrder() {
-  alert("Vielen Dank für Ihre Bestellung!")
+// Berechnung der Gesamtsumme
+const gesamtPreis = computed(() => {
+  return warenkorbProdukte.value.reduce((sum, produkt) => sum + produkt.preis * produkt.menge, 0)
+})
+
+// Kauf abschließen
+const completePurchase = () => {
+  alert("Vielen Dank für Ihren Kauf!")
 }
+
+// Countdown starten, wenn die Seite geladen wird
+onMounted(() => {
+  startCountdown()
+})
 </script>
 
 <style scoped>
-.bg-dark-blue {
-  background-color: #1a202c;
+.container {
+  max-width: 800px;
 }
-.text-dark-blue {
-  color: #1a202c;
+
+button:focus {
+  outline: none;
 }
-.bg-turquoise {
-  background-color: #0bc3c4;
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
 }
-.bg-turquoise-dark {
-  background-color: #09a3a3;
+
+@keyframes blink {
+  90% {
+    opacity: 0.8;
+  }
 }
 </style>

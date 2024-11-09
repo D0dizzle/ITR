@@ -4,7 +4,8 @@
 <CountdownBanner></CountdownBanner>
 <Produkte></Produkte>
 <Testimonial></Testimonial>
-<Popup></Popup>
+
+<CookieBanner></CookieBanner>
 
 
 </template>

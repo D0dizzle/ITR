@@ -1,6 +1,7 @@
 
 interface _GlobalComponents {
-      'CountdownBanner': typeof import("../components/CountdownBanner.vue")['default']
+      'CookieBanner': typeof import("../components/CookieBanner.vue")['default']
+    'CountdownBanner': typeof import("../components/CountdownBanner.vue")['default']
     'Footer': typeof import("../components/Footer.vue")['default']
     'Navbar': typeof import("../components/Navbar.vue")['default']
     'Popup': typeof import("../components/Popup.vue")['default']
@@ -27,7 +28,8 @@ interface _GlobalComponents {
     'Head': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Head']
     'Html': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Html']
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
-      'LazyCountdownBanner': typeof import("../components/CountdownBanner.vue")['default']
+      'LazyCookieBanner': typeof import("../components/CookieBanner.vue")['default']
+    'LazyCountdownBanner': typeof import("../components/CountdownBanner.vue")['default']
     'LazyFooter': typeof import("../components/Footer.vue")['default']
     'LazyNavbar': typeof import("../components/Navbar.vue")['default']
     'LazyPopup': typeof import("../components/Popup.vue")['default']
@@ -68,6 +70,7 @@ declare module 'vue' {
   export interface GlobalComponents extends _GlobalComponents { }
 }
 
+export const CookieBanner: typeof import("../components/CookieBanner.vue")['default']
 export const CountdownBanner: typeof import("../components/CountdownBanner.vue")['default']
 export const Footer: typeof import("../components/Footer.vue")['default']
 export const Navbar: typeof import("../components/Navbar.vue")['default']
@@ -95,6 +98,7 @@ export const Style: typeof import("../node_modules/nuxt/dist/head/runtime/compon
 export const Head: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Head']
 export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Html']
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
+export const LazyCookieBanner: typeof import("../components/CookieBanner.vue")['default']
 export const LazyCountdownBanner: typeof import("../components/CountdownBanner.vue")['default']
 export const LazyFooter: typeof import("../components/Footer.vue")['default']
 export const LazyNavbar: typeof import("../components/Navbar.vue")['default']

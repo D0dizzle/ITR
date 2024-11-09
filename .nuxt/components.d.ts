@@ -1,7 +1,9 @@
 
 interface _GlobalComponents {
-      'Footer': typeof import("../components/Footer.vue")['default']
+      'CountdownBanner': typeof import("../components/CountdownBanner.vue")['default']
+    'Footer': typeof import("../components/Footer.vue")['default']
     'Navbar': typeof import("../components/Navbar.vue")['default']
+    'Popup': typeof import("../components/Popup.vue")['default']
     'Produkte': typeof import("../components/Produkte.vue")['default']
     'Testimonial': typeof import("../components/Testimonial.vue")['default']
     'NuxtWelcome': typeof import("../node_modules/@nuxt/ui-templates/dist/templates/welcome.vue")['default']
@@ -25,8 +27,10 @@ interface _GlobalComponents {
     'Head': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Head']
     'Html': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Html']
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
-      'LazyFooter': typeof import("../components/Footer.vue")['default']
+      'LazyCountdownBanner': typeof import("../components/CountdownBanner.vue")['default']
+    'LazyFooter': typeof import("../components/Footer.vue")['default']
     'LazyNavbar': typeof import("../components/Navbar.vue")['default']
+    'LazyPopup': typeof import("../components/Popup.vue")['default']
     'LazyProdukte': typeof import("../components/Produkte.vue")['default']
     'LazyTestimonial': typeof import("../components/Testimonial.vue")['default']
     'LazyNuxtWelcome': typeof import("../node_modules/@nuxt/ui-templates/dist/templates/welcome.vue")['default']
@@ -64,8 +68,10 @@ declare module 'vue' {
   export interface GlobalComponents extends _GlobalComponents { }
 }
 
+export const CountdownBanner: typeof import("../components/CountdownBanner.vue")['default']
 export const Footer: typeof import("../components/Footer.vue")['default']
 export const Navbar: typeof import("../components/Navbar.vue")['default']
+export const Popup: typeof import("../components/Popup.vue")['default']
 export const Produkte: typeof import("../components/Produkte.vue")['default']
 export const Testimonial: typeof import("../components/Testimonial.vue")['default']
 export const NuxtWelcome: typeof import("../node_modules/@nuxt/ui-templates/dist/templates/welcome.vue")['default']
@@ -89,8 +95,10 @@ export const Style: typeof import("../node_modules/nuxt/dist/head/runtime/compon
 export const Head: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Head']
 export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Html']
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
+export const LazyCountdownBanner: typeof import("../components/CountdownBanner.vue")['default']
 export const LazyFooter: typeof import("../components/Footer.vue")['default']
 export const LazyNavbar: typeof import("../components/Navbar.vue")['default']
+export const LazyPopup: typeof import("../components/Popup.vue")['default']
 export const LazyProdukte: typeof import("../components/Produkte.vue")['default']
 export const LazyTestimonial: typeof import("../components/Testimonial.vue")['default']
 export const LazyNuxtWelcome: typeof import("../node_modules/@nuxt/ui-templates/dist/templates/welcome.vue")['default']

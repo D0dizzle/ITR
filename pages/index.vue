@@ -1,7 +1,10 @@
 <template>
 
+
+<CountdownBanner></CountdownBanner>
 <Produkte></Produkte>
 <Testimonial></Testimonial>
+<Popup></Popup>
 
 
 </template>

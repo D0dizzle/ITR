@@ -1,4 +1,5 @@
 # ITR
 
+# .env: 
 SUPABASE_URL="https://eupzyyzqzwltqgzvqdxm.supabase.co"
 SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1cHp5eXpxendsdHFnenZxZHhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzEwODUyOTYsImV4cCI6MjA0NjY2MTI5Nn0.jMiGMX8SR2hhXJqIwS5P78oqSADPJjyyxMBJu5G5JIk"

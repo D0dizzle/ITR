@@ -1,33 +1,118 @@
 <template>
-    <div v-if="showPopup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-      <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm text-center">
-        <h2 class="text-2xl font-bold text-red-600">Nicht verpassen!</h2>
-        <p class="mt-4">Erhalten Sie exklusiven Zugang zu unseren Angeboten!</p>
-        <button @click="closePopup" class="mt-4 bg-turquoise text-white font-bold py-2 px-4 rounded">Mehr erfahren</button>
-        <button @click="closePopup" class="text-gray-400 text-sm mt-4">Schließen</button>
+  <div class="container mx-auto py-8 max-w-screen-xl">
+    <h2 class="text-4xl font-bold text-center mb-8">Verfügbare Produkte</h2>
+
+    <div v-if="produkte.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+      <div
+        v-for="produkt in produkte"
+        :key="produkt.id"
+        class="bg-white rounded-lg shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-2xl max-w-xs"
+      >
+        <img :src="produkt.bild" alt="Produktbild" class="mx-auto h-96 object-cover mb-4" />
+
+        <div class="px-4 pb-4">
+          <p class="text-xl font-semibold text-gray-800 mb-2">{{ produkt.name }}</p>
+          <p class="text-sm text-gray-600 mb-4">{{ produkt.beschreibung }}</p>
+          <p class="text-lg font-bold text-green-600 mb-4">{{ produkt.preis }} €</p>
+          <p class="text-sm text-red-600 bg-red-100 inline-block py-1 px-2 rounded-full mb-4">Nur noch 5 Stück verfügbar!</p>
+        </div>
+
+        <div class="px-4 pb-4 pt-2">
+          <button
+            @click="addToCart(produkt)"
+            class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 animate-bounce"
+          >
+            In den Warenkorb
+          </button>
+        </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted } from 'vue'
-  
-  const showPopup = ref(false)
-  
-  function closePopup() {
-    showPopup.value = false
-  }
-  
-  onMounted(() => {
+
+    <div v-if="showToast" class="toast fixed bottom-4 right-4 bg-green-600 text-white py-3 px-6 rounded-md shadow-lg">
+      <p>Produkt wurde dem Warenkorb hinzugefügt!</p>
+      <button @click="closeToast" class="text-white font-bold">Schließen</button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+const supabase = useSupabaseClient()
+const produkte = ref([])
+const showToast = ref(false)
+
+const fetchProdukte = async () => {
+  const { data, error } = await supabase.from('produkte').select('id, name, bild, beschreibung, preis')
+  if (data) produkte.value = data
+  else console.error("Fehler beim Abrufen der Produkte:", error)
+}
+
+const addToCart = async (produkt) => {
+  const { data, error } = await supabase.from('warenkorb').upsert([{ produkt_id: produkt.id, menge: 1 }])
+  if (data) {
+    showToast.value = true
     setTimeout(() => {
-      showPopup.value = true
-    }, 15000) // 15 Sekunden Verzögerung
-  })
-  </script>
-  
-  <style scoped>
-  .bg-turquoise {
-    background-color: #0bc3c4;
+      showToast.value = false
+    }, 3000)
+    await fetchCartCount()
+  } else {
+    console.error("Fehler beim Hinzufügen des Produkts:", error)
   }
-  </style>
-  
+}
+
+const fetchCartCount = async () => {
+  const { data, error } = await supabase.from('warenkorb').select('id')
+  if (data) cartItemCount.value = data.length
+  else console.error("Fehler beim Abrufen der Warenkorbanzahl:", error)
+}
+
+const closeToast = () => {
+  showToast.value = false
+}
+
+onMounted(() => {
+  fetchProdukte()
+  fetchCartCount()
+})
+</script>
+
+<style scoped>
+.toast {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+img {
+  object-fit: cover;
+  height: 18rem;
+}
+
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #1c64f2;
+}
+
+button:focus {
+  outline: none;
+}
+</style>

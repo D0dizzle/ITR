@@ -8,8 +8,8 @@
       <div>
         <h3 class="text-lg font-bold mb-4">Kundenservice</h3>
         <ul>
-          <li><NuxtLink to="/faq" class="hover:text-turquoise">Häufige Fragen</NuxtLink></li>
-          <li><NuxtLink to="/contact" class="hover:text-turquoise">Kontakt</NuxtLink></li>
+          <li><NuxtLink to="/" class="hover:text-turquoise">Häufige Fragen</NuxtLink></li>
+          <li><NuxtLink to="/" class="hover:text-turquoise">Kontakt</NuxtLink></li>
         </ul>
       </div>
       <div>

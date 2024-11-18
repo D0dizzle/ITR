@@ -1,10 +1,10 @@
 <template>
-  <div class="container mx-auto py-8 max-w-screen-lg px-4">
+  <div class="w-full h-full mx-auto py-20 max-w-screen-lg px-4 mb-96">
     <h2 class="text-4xl font-bold text-center mb-8">Warenkorb</h2>
 
     <!-- Countdown-Timer für Dringlichkeit -->
     <div v-if="timeLeft > 0" class="bg-red-100 text-red-700 p-4 rounded-lg mb-6 text-center font-bold animate-blink">
-      Schnappen Sie sich den Rabatt! Nur noch {{ formatTimeLeft }} Minuten übrig!
+      Beeilen Sie sich! Ihr Warenkorb ist nur noch {{ formatTimeLeft }} Minuten reserviert!
     </div>
 
     <div v-if="warenkorbProdukte.length > 0">
@@ -38,7 +38,7 @@
 
       <!-- Checkout-Button ohne Bewegung -->
       <div class="flex justify-end">
-        <button @click="goToCheckout" class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <button @click="goToCheckout" class="px-6 py-3 mb-96 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
           Zur Kasse
         </button>
 
@@ -207,9 +207,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.container {
-  max-width: 800px;
-}
 
 button:focus {
   outline: none;

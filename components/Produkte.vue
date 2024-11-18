@@ -1,34 +1,40 @@
 <template>
   <div class="container mx-auto py-8 max-w-screen-xl">
-    <h2 class="text-4xl font-bold text-center mb-8">Verfügbare Produkte</h2>
+    <h2 class="text-4xl font-bold text-center mb-8 mt-20 pb-10">Verfügbare Produkte</h2>
 
     <div v-if="produkte.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
       <div v-for="produkt in produkte" :key="produkt.id" class="bg-white rounded-lg shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-2xl max-w-xs">
 
-        <!-- Produktbild -->
-        <img :src="produkt.bild" alt="Produktbild" class="mx-auto h-96 object-cover mb-4" />
+<!-- Produktbild -->
+<img :src="produkt.bild" alt="Produktbild" class="mx-auto h-96 object-cover mb-4" />
 
-        <div class="px-4 pb-4">
-          <!-- Produktname -->
-          <p class="text-xl font-semibold text-gray-800 mb-2">{{ produkt.name }}</p>
+<div class="px-4 pb-4">
+  <!-- Produktname -->
+  <p class="text-xl font-semibold text-gray-800 mb-2">{{ produkt.name }}</p>
 
-          <!-- Produktbeschreibung -->
-          <p class="text-sm text-gray-600 mb-4">{{ produkt.beschreibung }}</p>
+  <!-- Produktbeschreibung -->
+  <p class="text-sm text-gray-600 mb-4">{{ produkt.beschreibung }}</p>
 
-          <!-- Preis -->
-          <p class="text-lg font-bold text-green-600 mb-4">{{ produkt.preis }} €</p>
+  <!-- Vorheriger und aktueller Preis -->
+  <div class="mb-4">
+    <p class="text-sm text-gray-500 line-through">Vorher: {{ (produkt.preis * 1.2).toFixed(2) }} €</p>
+    <p class="text-lg font-bold text-green-600">Jetzt: {{ produkt.preis }} €</p>
+    <p class="text-xs text-red-600">Nur für kurze Zeit verfügbar!</p>
+  </div>
 
-          <!-- Verfügbarkeit -->
-          <p class="text-sm text-red-600 bg-red-100 inline-block py-1 px-2 rounded-full mb-4">Nur noch 5 Stück verfügbar!</p>
-        </div>
+  <!-- Verfügbarkeit -->
+  <p class="text-sm text-red-600 bg-red-100 inline-block py-1 px-2 rounded-full mb-4">
+    Nur noch {{ produkt.verfuegbarkeit }} Stück verfügbar!
+  </p>
+</div>
 
-        <!-- Warenkorb-Button -->
-        <div class="px-4 pb-4 pt-2">
-          <button @click="addToCart(produkt)" class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            In den Warenkorb
-          </button>
-        </div>
-      </div>
+<!-- Warenkorb-Button -->
+<div class="px-4 pb-4 pt-2">
+  <button @click="addToCart(produkt)" class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+    In den Warenkorb
+  </button>
+</div>
+</div>
     </div>
 
     <!-- Benachrichtigung nach Hinzufügen zum Warenkorb -->
@@ -52,11 +58,16 @@ const fetchProdukte = async () => {
     .select('id, name, bild, beschreibung, preis')
 
   if (data) {
-    produkte.value = data
+    // Füge für jedes Produkt eine zufällige Verfügbarkeit hinzu
+    produkte.value = data.map(produkt => ({
+      ...produkt,
+      verfuegbarkeit: Math.floor(Math.random() * 10) + 1 // Zufallswert zwischen 1 und 10
+    }))
   } else {
     console.error("Fehler beim Abrufen der Produkte:", error)
   }
 }
+
 
 // Produkt zum Warenkorb hinzufügen
 const addToCart = async (produkt) => {

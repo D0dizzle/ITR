@@ -1,36 +1,62 @@
 <template>
   <div v-if="isVisible" class="fixed bottom-0 left-0 w-full bg-gray-800 text-white p-4 text-center z-50">
-    <p>Diese Website verwendet Cookies, um Ihre Erfahrung zu verbessern. Ihre Einstellungen:</p>
-    <div class="flex justify-center space-x-4 mt-2">
+    <p>Diese Website verwendet Cookies, um Ihre Erfahrung zu verbessern.</p>
+    <div v-if="!isManagingOptions" class="mt-4">
+      <button @click="acceptCookies" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+        Akzeptieren
+      </button>
+      <button @click="toggleOptions" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2">
+        Optionen verwalten
+      </button>
+    </div>
+    <div v-else class="flex flex-col items-center space-y-2 mt-4">
       <label class="flex items-center">
         <input type="checkbox" disabled checked class="mr-2"> Notwendige Cookies
       </label>
       <label class="flex items-center">
-        <input type="checkbox" disabled checked class="mr-2"> Marketing-Cookies
+        <input type="checkbox" v-model="marketingCookies" class="mr-2"> Marketing-Cookies
       </label>
       <label class="flex items-center">
-        <input type="checkbox" disabled checked class="mr-2"> Analyse-Cookies
+        <input type="checkbox" v-model="analyticsCookies" class="mr-2"> Analyse-Cookies
       </label>
+      <div class="mt-4">
+        <button @click="savePreferences" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+          Speichern
+        </button>
+        <button @click="toggleOptions" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2">
+          Zurück
+        </button>
+      </div>
     </div>
-    <button @click="acceptCookies" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-2">Akzeptieren</button>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 
 const isVisible = ref(true);
-
-
+const isManagingOptions = ref(false);
+const marketingCookies = ref(true);
+const analyticsCookies = ref(true);
 
 const acceptCookies = () => {
   isVisible.value = false;
+  savePreferences(true, true); // Alles akzeptiert
+};
 
-  localStorage.setItem('cookiesAccepted', 'true');
+const toggleOptions = () => {
+  isManagingOptions.value = !isManagingOptions.value;
+};
+
+const savePreferences = (marketing = marketingCookies.value, analytics = analyticsCookies.value) => {
+  localStorage.setItem("cookiesAccepted", "true");
+  localStorage.setItem("marketingCookies", marketing);
+  localStorage.setItem("analyticsCookies", analytics);
+  isVisible.value = false;
 };
 </script>
 
 <style scoped>
-
 .fixed {
   position: fixed;
 }
@@ -59,16 +85,20 @@ const acceptCookies = () => {
   display: flex;
 }
 
-.justify-center {
-  justify-content: center;
+.flex-col {
+  flex-direction: column;
 }
 
-.space-x-4 {
-  margin-right: 1rem;
+.items-center {
+  align-items: center;
 }
 
-.mt-2 {
-  margin-top: 0.5rem;
+.space-y-2 > :not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .bg-red-500 {
@@ -97,7 +127,15 @@ const acceptCookies = () => {
   border-radius: 0.25rem;
 }
 
-.mt-2 {
-  margin-top: 0.5rem;
+.bg-gray-600 {
+  background-color: #718096;
+}
+
+.hover\:bg-gray-700:hover {
+  background-color: #4a5568;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 </style>

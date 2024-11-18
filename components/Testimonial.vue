@@ -1,10 +1,10 @@
 <template>
   <div>
     <!-- Inspiration des Designs von tailwindui -->
-    <p class="text-center text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-brand_blue mt-20">
+    <p class="text-center text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-brand_blue mt-20 pt-16">
       Kundenfeedback zu unseren Leistungen
     </p>
-    <div class="slideshow-container relative overflow-hidden w-full max-w-4xl mx-auto mt-14">
+    <div class="slideshow-container relative overflow-hidden w-full max-w-4xl mx-auto mt-14 pb-28">
       <div class="slides flex transition-transform duration-1000"
            :style="{ 'transform': `translateX(-${currentIndex * 100}%)` }">
         <figure v-for="(slide, index) in slides" :key="index"

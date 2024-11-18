@@ -56,7 +56,7 @@
       <p class="text-2xl font-bold mb-4">Nicht verpassen!</p>
       <p class="mb-6">Sichern Sie sich Ihre Produkte, bevor sie vergriffen sind!</p>
       <button @click="closePopup" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-        Weiter shoppen
+        Schnell zur Kasse!
       </button>
     </div>
   </div>
@@ -189,7 +189,7 @@ const gesamtPreis = computed(() => {
 // Popup nach 30 Sekunden anzeigen
 setTimeout(() => {
   showPopup.value = true
-}, 30000)
+}, 15000)
 
 const closePopup = () => {
   showPopup.value = false

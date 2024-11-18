@@ -1,20 +1,26 @@
 <template>
-  <div class="container mx-auto py-8 max-w-screen-lg text-center">
-    <h2 class="text-4xl font-bold text-green-600 mb-4">Vielen Dank für Ihre Bestellung!</h2>
-    <p class="text-lg text-gray-700 mb-6">Ihre Bestellung wurde erfolgreich aufgegeben.</p>
+  <div class="container mx-auto py-16 max-w-screen-lg text-center pt-44 pb-96">
+    <h2 class="text-5xl font-extrabold text-green-600 mb-8">Vielen Dank für Ihre Bestellung!</h2>
+    <p class="text-2xl text-gray-700 mb-12">Ihre Bestellung wurde erfolgreich aufgegeben.</p>
 
     <template v-if="isAboSelected">
-      <p class="text-lg text-green-500 font-semibold mb-6">
+      <p class="text-xl text-green-500 font-semibold mb-4">
         Ihr monatliches Abo wurde erfolgreich eingerichtet.
       </p>
-      <p class="text-sm text-gray-600 mb-8">Sie können das Abo jederzeit in Ihrem Kundenkonto kündigen.</p>
+      <p class="text-base text-gray-600 mb-12">
+        Sie können das Abo jederzeit in Ihrem Kundenkonto kündigen.
+      </p>
     </template>
 
-    <NuxtLink to="/" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+    <NuxtLink 
+      to="/" 
+      class="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition-shadow shadow-lg hover:shadow-xl"
+    >
       Zurück zur Startseite
     </NuxtLink>
   </div>
 </template>
+
 
 <script setup>
 import { useRoute } from 'vue-router';

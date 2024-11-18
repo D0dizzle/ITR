@@ -1,6 +1,6 @@
 <template>
-    <div class="container mx-auto py-8 max-w-screen-lg px-4">
-      <h2 class="text-4xl font-bold text-center mb-8">Mein Konto</h2>
+    <div class="container mx-auto py-8 max-w-screen-lg px-4 pb-96">
+      <h2 class="text-4xl font-bold text-center mb-16 mt-16">Mein Konto</h2>
   
       <!-- Rückmeldung -->
       <div v-if="feedbackMessage" :class="feedbackClass" class="p-4 rounded-lg mb-6 text-center">
@@ -8,7 +8,7 @@
       </div>
   
       <!-- Abonnement-Details -->
-      <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-96">
         <h3 class="text-2xl font-semibold mb-4">Ihr Abonnement</h3>
         <p class="text-gray-700 mb-4">
           Sie haben das <strong>Premium-Abo</strong>, das Ihnen folgende Vorteile bietet:

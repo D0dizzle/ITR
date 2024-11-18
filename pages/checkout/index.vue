@@ -85,71 +85,129 @@
       </form>
     </div>
 
+
+    <template>
+  <div class="container mx-auto py-8 max-w-screen-lg">
+    <h2 class="text-4xl font-bold text-center mb-8">Checkout</h2>
+
+    <!-- Zahlungsmethoden -->
     <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-  <h3 class="text-2xl font-semibold mb-4">Zahlungsmethode</h3>
-  <div class="space-y-4">
-    <!-- Kreditkarte -->
-    <label class="flex items-center p-4 border rounded-lg hover:shadow-md transition cursor-pointer">
-      <input type="radio" value="Kreditkarte" v-model="paymentMethod" class="form-radio h-5 w-5 text-blue-600" />
-      <i class="fas fa-credit-card text-blue-600 ml-4 text-2xl"></i>
-      <div class="ml-4">
-        <p class="text-gray-700 font-semibold">Kreditkarte</p>
-        <p class="text-sm text-gray-500">Visa, MasterCard, American Express</p>
-      </div>
-    </label>
-
-    <!-- PayPal -->
-    <label class="flex items-center p-4 border rounded-lg hover:shadow-md transition cursor-pointer">
-      <input type="radio" value="PayPal" v-model="paymentMethod" class="form-radio h-5 w-5 text-blue-600" />
-      <i class="fab fa-paypal text-blue-600 ml-4 text-2xl"></i>
-      <div class="ml-4">
-        <p class="text-gray-700 font-semibold">PayPal</p>
-        <p class="text-sm text-gray-500">Sicher und schnell bezahlen mit PayPal</p>
-      </div>
-    </label>
-
-    <!-- Banküberweisung -->
-    <label class="flex items-center p-4 border rounded-lg hover:shadow-md transition cursor-pointer">
-      <input type="radio" value="Banküberweisung" v-model="paymentMethod" class="form-radio h-5 w-5 text-blue-600" />
-      <i class="fas fa-university text-blue-600 ml-4 text-2xl"></i>
-      <div class="ml-4">
-        <p class="text-gray-700 font-semibold">Banküberweisung</p>
-        <p class="text-sm text-gray-500">Überweise den Betrag manuell auf unser Konto</p>
-      </div>
-    </label>
-  </div>
-
-  <!-- Dialog für Eingabefelder -->
-  <div class="mt-6">
-    <template v-if="paymentMethod === 'Kreditkarte'">
-      <h4 class="text-lg font-semibold text-gray-800 mb-4">Kreditkarteninformationen</h4>
+      <h3 class="text-2xl font-semibold mb-4">Zahlungsmethode</h3>
       <div class="space-y-4">
-        <input type="text" placeholder="Kartennummer" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        <div class="flex space-x-4">
-          <input type="text" placeholder="MM/YY" class="w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-          <input type="text" placeholder="CVC" class="w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        </div>
-        <input type="text" placeholder="Name auf der Karte" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <!-- Kreditkarte -->
+        <label class="flex items-center p-4 border rounded-lg hover:shadow-md transition cursor-pointer">
+          <input type="radio" value="Kreditkarte" v-model="paymentMethod" class="form-radio h-5 w-5 text-blue-600" />
+          <i class="fas fa-credit-card text-blue-600 ml-4 text-2xl"></i>
+          <div class="ml-4">
+            <p class="text-gray-700 font-semibold">Kreditkarte</p>
+            <p class="text-sm text-gray-500">Visa, MasterCard, American Express</p>
+          </div>
+        </label>
+
+        <!-- PayPal -->
+        <label class="flex items-center p-4 border rounded-lg hover:shadow-md transition cursor-pointer">
+          <input type="radio" value="PayPal" v-model="paymentMethod" class="form-radio h-5 w-5 text-blue-600" />
+          <i class="fab fa-paypal text-blue-600 ml-4 text-2xl"></i>
+          <div class="ml-4">
+            <p class="text-gray-700 font-semibold">PayPal</p>
+            <p class="text-sm text-gray-500">Sicher und schnell bezahlen mit PayPal</p>
+          </div>
+        </label>
+
+        <!-- Banküberweisung -->
+        <label class="flex items-center p-4 border rounded-lg hover:shadow-md transition cursor-pointer">
+          <input type="radio" value="Banküberweisung" v-model="paymentMethod" class="form-radio h-5 w-5 text-blue-600" />
+          <i class="fas fa-university text-blue-600 ml-4 text-2xl"></i>
+          <div class="ml-4">
+            <p class="text-gray-700 font-semibold">Banküberweisung</p>
+            <p class="text-sm text-gray-500">Überweise den Betrag manuell auf unser Konto</p>
+          </div>
+        </label>
       </div>
-    </template>
 
-    <template v-else-if="paymentMethod === 'PayPal'">
-      <h4 class="text-lg font-semibold text-gray-800 mb-4">Weiterleitung zu PayPal</h4>
-      <p class="text-sm text-gray-500 mb-4">Du wirst zu PayPal weitergeleitet, um die Zahlung abzuschließen.</p>
-      <button @click="redirectToPayPal" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-        Weiter zu PayPal
-      </button>
-    </template>
+      <!-- Dialog für Eingabefelder -->
+      <div class="mt-6">
+        <template v-if="paymentMethod === 'Kreditkarte'">
+          <h4 class="text-lg font-semibold text-gray-800 mb-4">Kreditkarteninformationen</h4>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="cardNumber">Kartennummer</label>
+              <input
+                type="text"
+                id="cardNumber"
+                v-model="cardDetails.cardNumber"
+                placeholder="1234 5678 9012 3456"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                @input="formatCardNumber"
+                maxlength="19"
+              />
+              <p v-if="errors.cardNumber" class="text-red-600 text-sm mt-1">{{ errors.cardNumber }}</p>
+            </div>
 
-    <template v-else-if="paymentMethod === 'Banküberweisung'">
-      <h4 class="text-lg font-semibold text-gray-800 mb-4">Banküberweisungsdetails</h4>
-      <p class="text-sm text-gray-500">Bitte überweise den Betrag an folgendes Konto:</p>
-      <p class="text-sm text-gray-700 font-semibold mt-2">IBAN: DE12345678901234567890</p>
-      <p class="text-sm text-gray-700">BIC: GENODEF1XXX</p>
-      <p class="text-sm text-gray-700">Empfänger: Muster GmbH</p>
-    </template>
-  </div>
-</div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="expiryDate">Ablaufdatum (MM/YY)</label>
+              <input
+                type="text"
+                id="expiryDate"
+                v-model="cardDetails.expiryDate"
+                placeholder="MM/YY"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                maxlength="5"
+                @input="formatExpiryDate"
+              />
+              <p v-if="errors.expiryDate" class="text-red-600 text-sm mt-1">{{ errors.expiryDate }}</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="cvc">CVC</label>
+              <input
+                type="text"
+                id="cvc"
+                v-model="cardDetails.cvc"
+                placeholder="123"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                maxlength="3"
+              />
+              <p v-if="errors.cvc" class="text-red-600 text-sm mt-1">{{ errors.cvc }}</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="cardName">Name auf der Karte</label>
+              <input
+                type="text"
+                id="cardName"
+                v-model="cardDetails.cardName"
+                placeholder="Max Mustermann"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <p v-if="errors.cardName" class="text-red-600 text-sm mt-1">{{ errors.cardName }}</p>
+            </div>
+          </div>
+        </template>
+
+        <template v-else-if="paymentMethod === 'PayPal'">
+          <h4 class="text-lg font-semibold text-gray-800 mb-4">Weiterleitung zu PayPal</h4>
+          <p class="text-sm text-gray-500 mb-4">Du wirst zu PayPal weitergeleitet, um die Zahlung abzuschließen.</p>
+          <button @click="redirectToPayPal" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            Weiter zu PayPal
+          </button>
+        </template>
+
+        <template v-else-if="paymentMethod === 'Banküberweisung'">
+          <h4 class="text-lg font-semibold text-gray-800 mb-4">Banküberweisungsdetails</h4>
+          <p class="text-sm text-gray-500">Bitte überweise den Betrag an folgendes Konto:</p>
+          <p class="text-sm text-gray-700 font-semibold mt-2">IBAN: DE12345678901234567890</p>
+          <p class="text-sm text-gray-700">BIC: GENODEF1XXX</p>
+          <p class="text-sm text-gray-700">Empfänger: Muster GmbH</p>
+        </template>
+      </div>
+    </div>
+
+
+    </div>
+</template>
+
+
    
 
 
@@ -183,7 +241,59 @@ const billingDetails = ref({
   land: '',
 });
 
-const paymentMethod = ref('Kreditkarte');
+// Zahlungsdetails
+const paymentMethod = ref('');
+const cardDetails = reactive({
+  cardNumber: '',
+  expiryDate: '',
+  cvc: '',
+  cardName: '',
+});
+const errors = reactive({
+  cardNumber: null,
+  expiryDate: null,
+  cvc: null,
+  cardName: null,
+});
+
+// Formatierung der Kartennummer
+const formatCardNumber = () => {
+  cardDetails.cardNumber = cardDetails.cardNumber
+    .replace(/\D/g, '') // Entferne Nicht-Ziffern
+    .replace(/(.{4})/g, '$1 ') // Leerzeichen alle 4 Ziffern
+    .trim();
+};
+
+// Formatierung des Ablaufdatums
+const formatExpiryDate = () => {
+  cardDetails.expiryDate = cardDetails.expiryDate
+    .replace(/\D/g, '')
+    .replace(/^(\d{2})(\d{0,2})$/, '$1/$2')
+    .substr(0, 5);
+};
+
+// Validierung der Kreditkartendetails
+const validateCardDetails = () => {
+  errors.cardNumber = cardDetails.cardNumber.replace(/\s/g, '').length === 16
+    ? null
+    : 'Ungültige Kartennummer. Bitte geben Sie 16 Ziffern ein.';
+  errors.expiryDate = /^\d{2}\/\d{2}$/.test(cardDetails.expiryDate)
+    ? null
+    : 'Ungültiges Ablaufdatum. Format: MM/YY.';
+  errors.cvc = cardDetails.cvc.length === 3
+    ? null
+    : 'Ungültiger CVC. Bitte geben Sie 3 Ziffern ein.';
+  errors.cardName = cardDetails.cardName.length > 0
+    ? null
+    : 'Bitte geben Sie den Namen auf der Karte ein.';
+
+  return !errors.cardNumber && !errors.expiryDate && !errors.cvc && !errors.cardName;
+};
+
+// Weiterleitung zu PayPal
+const redirectToPayPal = () => {
+  window.location.href = 'https://www.paypal.com/checkoutnow';
+};
 
 // Funktion zum Laden der Warenkorbprodukte aus Supabase
 const fetchWarenkorbProdukte = async () => {
@@ -224,10 +334,6 @@ const gesamtPreis = computed(() => {
   );
 });
 
-// Weiterleitung zu PayPal
-const redirectToPayPal = () => {
-  window.location.href = 'https://www.paypal.com/checkoutnow';
-};
 
 // Bestellung abschicken und zur Bestätigungsseite navigieren
 const placeOrder = () => {

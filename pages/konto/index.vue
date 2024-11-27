@@ -8,7 +8,7 @@
     </div>
 
     <!-- Abonnement-Details -->
-    <div v-if="!isCancelling && !isFinalStep" class="bg-white rounded-lg shadow-lg p-6">
+    <div v-if="isSubscriptionActive && !isCancelling && !isFinalStep" class="bg-white rounded-lg shadow-lg p-6">
       <h3 class="text-2xl font-semibold mb-4">Ihr Abonnement</h3>
       <p class="text-gray-700 mb-4">
         Sie haben das <strong>Premium-Abo</strong>, das Ihnen folgende Vorteile bietet:
@@ -61,6 +61,14 @@
         </button>
       </div>
     </div>
+
+    <!-- Kein Abonnement mehr -->
+    <div v-if="!isSubscriptionActive" class="bg-white rounded-lg shadow-lg p-6 text-center">
+      <h3 class="text-2xl font-semibold mb-4">Kein aktives Abonnement</h3>
+      <p class="text-gray-700">
+        Ihr Abonnement wurde erfolgreich gekündigt. Wir hoffen, Sie bald wieder als Kunden begrüßen zu dürfen.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -74,6 +82,7 @@ const isFinalStep = ref(false);
 const feedbackMessage = ref("");
 const feedbackType = ref(""); // "success" oder "error"
 const cancellationReason = ref("");
+const isSubscriptionActive = ref(true); // Kontrolliert, ob das Abo aktiv ist
 
 // Berechnete Klasse für Feedback
 const feedbackClass = computed(() => {
@@ -106,8 +115,9 @@ const cancelSubscription = () => {
   }
   feedbackMessage.value = "Ihr Abonnement wurde erfolgreich gekündigt. Wir bedauern Ihren Verlust.";
   feedbackType.value = "error";
-  resetFeedback();
+  isSubscriptionActive.value = false; // Abo wird entfernt
   isFinalStep.value = false;
+  resetFeedback();
 };
 
 const backToAccount = () => {
@@ -122,12 +132,3 @@ const resetFeedback = () => {
   }, 5000); // Feedback nach 5 Sekunden entfernen
 };
 </script>
-
-<style scoped>
-.container {
-  max-width: 800px;
-}
-button:focus {
-  outline: none;
-}
-</style>
